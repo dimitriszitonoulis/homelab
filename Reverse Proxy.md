@@ -216,5 +216,6 @@ so I did not see the need to create an example configuration for the docker netw
 
  ---
  Sources:
-[^1]: [Nginx docs](https://nginx.org/en/docs/beginners_guide.html)
-[^2]: [Nginx reverse proxy docs](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/) 
+
+1. [Nginx docs](https://nginx.org/en/docs/beginners_guide.html)
+2. [Nginx reverse proxy docs](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)

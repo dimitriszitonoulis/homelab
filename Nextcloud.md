@@ -202,7 +202,7 @@ server {
 You can also check out:
 
 - [Official reverse proxy config for nginx](https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md)
-- [My reverse proxy config for nginx]()
+- [My reverse proxy config for nginx](./nginx)
 
 After adding, run:
 
@@ -289,7 +289,8 @@ It was created in [deployment step](#Deployment).
 
 ---
 Sources:
-[^1]: [Nextcloud AIO github](https://github.com/nextcloud/all-in-one)
-[^2]: [Nextcloud docker compose](https://github.com/nextcloud/all-in-one/blob/main/compose.yaml)
-[^3]: [Nextcloud Under Reverse Proxy](https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md)
-[^4]: [Nextcloud local instance](https://github.com/nextcloud/all-in-one/blob/main/local-instance.md)
+
+1. [Nextcloud AIO github](https://github.com/nextcloud/all-in-one)
+2. [Nextcloud docker compose](https://github.com/nextcloud/all-in-one/blob/main/compose.yaml)
+3. [Nextcloud Under Reverse Proxy](https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md)
+4. [Nextcloud local instance](https://github.com/nextcloud/all-in-one/blob/main/local-instance.md)

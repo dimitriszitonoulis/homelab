@@ -134,10 +134,11 @@ This will redirect all `http` on `port 80` traffic to `https` on `port 443`.
 
 ---
 Sources:
-[^1] [Certbot with docker](https://eff-certbot.readthedocs.io/en/latest/install.html#running-with-docker)
-[^2] [Manual certificates location](https://eff-certbot.readthedocs.io/en/latest/using.html#where-certs)
-[^3] [ACME Challenge types](https://letsencrypt.org/docs/challenge-types/)
-[^4] [Instructions for Cloudflare API with certbot](https://certbot-dns-cloudflare.readthedocs.io/en/stable/)
-[^5] [Dns plugins](https://eff-certbot.readthedocs.io/en/stable/using.html#dns-plugins)
-[^6] [Certbot staging](https://letsencrypt.org/docs/staging-environment/)
-[^7] [Certbot commands](https://eff-certbot.readthedocs.io/en/stable/using.html#certbot-command-line-options)
+
+1. [Certbot with docker](https://eff-certbot.readthedocs.io/en/latest/install.html#running-with-docker)
+2. [Manual certificates location](https://eff-certbot.readthedocs.io/en/latest/using.html#where-certs)
+3. [ACME Challenge types](https://letsencrypt.org/docs/challenge-types/)
+4. [Instructions for Cloudflare API with certbot](https://certbot-dns-cloudflare.readthedocs.io/en/stable/)
+5. [Dns plugins](https://eff-certbot.readthedocs.io/en/stable/using.html#dns-plugins)
+6. [Certbot staging](https://letsencrypt.org/docs/staging-environment/)
+7. [Certbot commands](https://eff-certbot.readthedocs.io/en/stable/using.html#certbot-command-line-options)
