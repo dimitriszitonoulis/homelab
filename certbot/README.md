@@ -8,7 +8,7 @@ with encrypted communication (HTTPS) without manual hassle.
 ## Specifications
 
 - certbot will run in a container
-- the certbot ***DNS-01 challenge* will be used
+- the certbot **DNS-01** challenge will be used
 - nginx is running in a container as a reverse proxy
 
 ### DNS-01 challenge
@@ -16,14 +16,14 @@ with encrypted communication (HTTPS) without manual hassle.
 This challenge asks you to prove that you control the DNS for your domain name
 by putting a specific value in a TXT record under that domain name.
 
+In order for Certbot to do that it will need an API key from your registar.
+
 Benefits of the **DNS-01 challenge**:
 
 - It allows you to issue wildcard certificates
 (i.e it is easier to create certificates for subdomains)
 - Your server does not need to be directly accessible to the internet
 (you do not need to expose ports).
-
-Certbot needs an API key from your registar in order to edit DNS records
 
 #### On your server create the directories
 
@@ -73,28 +73,28 @@ services:
       command: certonly --keep-until-expiring --non-interactive --preferred-challenges dns --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --dns-cloudflare-propagation-seconds 60 --email my_email -d "my_domain.com" -d "*.my_domain.com" --agree-tos
 ```
 
-##### Notes
-
-- When testing add the `--staging`  flag to the command.
-Otherwise, if you make a lot of requests when testing you will be rate limited.
-Check [staging environment](https://letsencrypt.org/docs/staging-environment/)
-for the rate limits and
-[certbot command line options](https://eff-certbot.readthedocs.io/en/stable/using.html#certbot-command-line-options)
-for more details about certbot commands.
-- For the certbot docker container do not put specify a `restart policy`.
-The specified command gets a certificate (almost immediatelly) then exits.
-This makes the container stop.
-If a `restart policy` like `always` or `unless-stopped`
-is specified the container is restarted,
-executes the command then terminates again (infinite restart loop).
+> [!NOTE]
+>
+> - When testing add the `--staging`  flag to the command.
+> Otherwise, if you make a lot of requests when testing you will be rate limited.
+> Check [staging environment](https://letsencrypt.org/docs/staging-environment/)
+> for the rate limits and
+> [certbot command line options](https://eff-certbot.readthedocs.io/en/stable/using.html#certbot-command-line-options)
+> for more details about certbot commands.
+> - For the certbot docker container do not put specify a `restart policy`.
+> The specified command gets a certificate (almost immediately) then exits.
+> This makes the container stop.
+> If a `restart policy` like `always` or `unless-stopped`
+> is specified the container is restarted,
+> executes the command then terminates again (infinite restart loop).
 
 #### Provide certbot with your api key
 
 I use cloudflare so I will use the
 [certbot-dns-cloudflare](https://certbot-dns-cloudflare.readthedocs.io/en/stable/)
 plugin.
-Check [dns plugins](https://eff-certbot.readthedocs.io/en/stable/using.html#dns-plugins)
-for the available certbot dns plugins.
+Check available certbot
+[dns plugins](https://eff-certbot.readthedocs.io/en/stable/using.html#dns-plugins).
 
 For the `./certbot/cloudflare.ini` file:
 
@@ -131,6 +131,8 @@ server {
 ```
 
 This will redirect all `http` on `port 80` traffic to `https` on `port 443`.
+Since `_` is used as the `server_name` this server block will match
+all hostnames.
 
 ---
 Sources:
