@@ -1,100 +1,42 @@
 networks:
   proxy_net:
     name: proxy_net
-    # internal: true
+    # internal: true # does not work with nextcloud
     driver: bridge
     ipam:
       config:
         - subnet: ${PROXY_NET_SUBNET}
           gateway: ${PROXY_NET_GATEWAY}
-  frontend_net:
-    name: frontend_net
-    driver: bridge
+  # frontend_net:
+  #   name: frontend_net
+  #   driver: bridge
 
 services:
-    reverse_proxy:
-        container_name: reverse_proxy
-        networks:
-            - proxy_net
-            - frontend_net
-        image: nginx
-        volumes:
-          - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-          - ./nginx/conf.d:/etc/nginx/conf.d
-          - ./nginx/templates:/etc/nginx/templates
-          - ./nginx/error.log:/var/log/nginx/error.log
-          - ./certbot/conf/:/etc/letsencrypt
-          - ./certbot/www/:/var/www/certbot
-        ports:
-          - "80:80"
-          - "443:443"
-        # only needed for templates
-        environment:
-          - NGINX_HOST=localhost
-          - NGINX_PORT=80
-        restart: unless-stopped
+  reverse_proxy:
+    container_name: reverse_proxy
+    networks:
+      - proxy_net
+      # - frontend_net
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/error.log:/var/log/nginx/error.log
+      - ./certbot/conf/:/etc/letsencrypt
+      - ./certbot/www/:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    # only needed for templates
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    restart: unless-stopped
 
-# do not restart on failure
-    certbot:
-      container_name: certbot
-      #  Cloudflare version able to use cloudflare's API, needed for DNS challenge
-      image: certbot/dns-cloudflare
-      volumes:
-        - ./certbot/conf/:/etc/letsencrypt
-        - ./certbot/cloudflare.ini:/cloudflare.ini
-      command: certonly --keep-until-expiring --non-interactive --preferred-challenges dns --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --dns-cloudflare-propagation-seconds 60 --email ${CERTBOT_EMAIL} -d ${CERTBOT_DOMAIN} -d *.${CERTBOT_DOMAIN} --agree-tos
-
-  # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
-    pihole:
-        container_name: pihole
-        image: pihole/pihole:latest
-        networks:
-          - proxy_net
-        ports:
-          # DNS Ports
-          - "53:53/tcp"
-          - "53:53/udp"
-        environment:
-          # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
-          TZ: ${PIHOLE_REGION}
-          # Set a password to access the web interface. Not setting one will result in a random password being assigned
-          FTLCONF_webserver_api_password: ${PIHOLE_PASSWORD}
-          # If using Docker's default `bridge` network setting the dns listening mode should be set to 'all'
-          FTLCONF_dns_listeningMode: "all"
-        volumes:
-          # For persisting Pi-hole's databases and common configuration file
-          - "./pihole/etc-pihole:/etc/pihole"
-        cap_add:
-          # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-          # Required if you are using Pi-hole as your DHCP server, else not needed
-          - NET_ADMIN
-          # Required if you are using Pi-hole as your NTP client to be able to set the host's system time
-          - SYS_TIME
-          # Optional, if Pi-hole should get some more processing time
-          - SYS_NICE
-        restart: unless-stopped
-
-    nextcloud-aio-mastercontainer:
-        container_name: nextcloud-aio-mastercontainer
-        image: ghcr.io/nextcloud-releases/all-in-one:latest
-        networks:
-            - proxy_net
-        init: true
-        restart: unless-stopped
-        volumes:
-          - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
-          - /var/run/docker.sock:/var/run/docker.sock:ro
-        ports:
-            - 8080:8080 # This is the AIO interface, served via https and self-signed certificate. See https://github.com/nextcloud/all-in-one#explanation-of-used-ports
-        environment:
-          APACHE_PORT: 11000 # Is needed when running behind a web server or reverse proxy (like Apache, Nginx, Caddy, Cloudflare Tunnel and else). See https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md
-          APACHE_IP_BINDING: 0.0.0.0 # Should be set when running behind a web server or reverse proxy (like Apache, Nginx, Caddy, Cloudflare Tunnel and else) that is running on the same host. See https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md
-          APACHE_ADDITIONAL_NETWORK: proxy_net # (Optional) Connect the apache container to an additional docker network. Needed when behind a web server or reverse proxy (like Apache, Nginx, Caddy, Cloudflare Tunnel and else) running in a different docker network on same server. See https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md
-          # Allows to set the host directory for Nextcloud's datadir. ⚠️⚠️⚠️ Warning: do not set or adjust this value after the initial Nextcloud installation is done! See https://github.com/nextcloud/all-in-one#how-to-change-the-default-location-of-nextclouds-datadir
-          NEXTCLOUD_DATADIR: ${NC_DATADIR}
-          NEXTCLOUD_UPLOAD_LIMIT: 1024G # Can be adjusted if you need more. See https://github.com/nextcloud/all-in-one#how-to-adjust-the-upload-limit-for-nextcloud
-          NEXTCLOUD_MEMORY_LIMIT: 1024M # Can be adjusted if you need more. See https://github.com/nextcloud/all-in-one#how-to-adjust-the-php-memory-limit-for-nextcloud
-          SKIP_DOMAIN_VALIDATION: false
-volumes:
-    nextcloud_aio_mastercontainer:
-        name: nextcloud_aio_mastercontainer # This line is not allowed to be changed as otherwise the built-in backup solution will not work
+include:
+  - ./pihole/docker-compose.yml
+  - ./kosync/docker-compose.yml
+  - ./nc-compose.yml
+  - ./jellyfin/docker-compose.yml
+  - ./certbot/docker-compose.yml

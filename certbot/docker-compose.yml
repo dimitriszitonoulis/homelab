@@ -1,0 +1,16 @@
+networks:
+  proxy_net:
+    external: true
+services:
+  # do not restart on failure
+  certbot:
+    container_name: certbot
+    #  Cloudflare version able to use cloudflare's API, needed for DNS challenge
+    image: certbot/dns-cloudflare
+    volumes:
+      - ./conf/:/etc/letsencrypt
+      - ./cloudflare.ini:/cloudflare.ini
+    #      command: certonly --staging --keep-until-expiring --preferred-challenges dns --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --dns-cloudflare-propagation-seconds 60 --email my_email -d "mydomain.com" -d "*.mydomain.com" --agree-tos
+    command: certonly --keep-until-expiring --non-interactive --preferred-challenges dns --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --dns-cloudflare-propagation-seconds 60 --email ${CERTBOT_EMAIL} -d ${CERTBOT_DOMAIN} -d *.${CERTBOT_DOMAIN} --agree-tos
+
+

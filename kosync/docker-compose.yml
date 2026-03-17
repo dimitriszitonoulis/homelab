@@ -1,0 +1,18 @@
+services:
+  kosync:
+    build:
+      context: ./koreader-sync-server/
+    image: koreader/kosync
+    container_name: kosync
+    environment:
+      # - ENABLE_USER_REGISTRATION=true
+      - ENABLE_USER_REGISTRATION=false
+    volumes:
+      - ${APP_LOGS}:/app/koreader-sync-server/logs
+      - ${REDIS_LOGS}:/var/log/redis
+      - ${DATA_DIR}:/var/lib/redis
+    networks:
+      - proxy_net
+networks:
+  proxy_net:
+    external: true

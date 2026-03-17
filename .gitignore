@@ -1,1 +1,17 @@
 .env
+# certbot
+certbot/conf
+certbot/www
+# nginx
+nginx/nginx-templates
+nginx/templates
+nginx/error.log
+# jelyfin
+jellyfin/config
+jellyfin/fonts
+# kosync
+kosync/koreader-sync-server
+kosync/logs
+# pihole
+pihole/etc-dnsmasq.d
+pihole/etc-pihole
