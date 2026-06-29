@@ -1,0 +1,19 @@
+networks:
+  proxy_net:
+    external: true
+
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:15
+    container_name: forgejo
+    environment:
+      - USER_UID=${USER_UID}
+      - USER_GID=${USER_GID}
+    restart: unless-stopped
+    networks:
+      - proxy_net
+    volumes:
+      - ${DATA_DIR}:/data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${SSH_PORT}:22
