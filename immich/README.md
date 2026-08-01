@@ -77,4 +77,13 @@ sudo ./immich-go upload from-google-photos \
 > (ex when changing http to https).
 > Instead bind the default port that immich uses (default is 2283)
 > to a port of your server (ex 2283).
-> Then link to use will be: http://<server port>:2283.
+> Then link to use will be: http://\<server port\>:2283.
+
+### Cleanup
+
+- Visit the web ui for immich and delete the api key,
+  as it is not needed anymore (Account Settings>API Keys).
+  Also if you saved the api key anywhere remove the file
+  where it is saved. This is not necessary id you removed
+  the deleted the api key from immich, as it will be useless now.
+- Hide immich behind a reverse proxy (if you already did that).
