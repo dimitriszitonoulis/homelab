@@ -40,3 +40,4 @@ include:
   - ./nc-compose.yml
   - ./jellyfin/docker-compose.yml
   - ./certbot/docker-compose.yml
+  - ./searxng/docker-compose.yml

@@ -16,5 +16,8 @@ kosync/logs
 pihole/etc-dnsmasq.d
 pihole/etc-pihole
 
+# searxng
+searxng/core-data
+
 # homarr
 homarr/homarr
