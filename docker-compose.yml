@@ -37,7 +37,11 @@ services:
 include:
   - ./pihole/docker-compose.yml
   - ./kosync/docker-compose.yml
-  - ./nc-compose.yml
+  # - ./nextcloud/nc-compose.yml
   - ./jellyfin/docker-compose.yml
   - ./certbot/docker-compose.yml
+  - ./immich/docker-compose.yml
+  - ./portainer/docker-compose.yml
+  - ./homarr/docker-compose.yml
+  - ./forgejo/docker-compose.yml
   - ./searxng/docker-compose.yml
