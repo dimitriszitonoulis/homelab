@@ -1,13 +1,13 @@
 .env
 
 # certbot
-certbot/conf
-certbot/www
+reverse_proxy/certbot/conf
+reverse_proxy/certbot/www
 
 # nginx
-nginx/nginx-templates
-nginx/templates
-nginx/error.log
+reverse_proxy/nginx/nginx-templates
+reverse_proxy/nginx/templates
+reverse_proxy/nginx/error.log
 
 # jelyfin
 jellyfin/config
