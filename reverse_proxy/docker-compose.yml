@@ -1,16 +1,36 @@
 networks:
   proxy_net:
     external: true
+
 services:
+  reverse_proxy:
+    container_name: reverse_proxy
+    networks:
+      - proxy_net
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/error.log:/var/log/nginx/error.log
+      - ./certbot/conf/:/etc/letsencrypt
+      - ./certbot/www/:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    # only needed for templates
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    restart: unless-stopped
+
   # do not restart on failure
   certbot:
     container_name: certbot
     #  Cloudflare version able to use cloudflare's API, needed for DNS challenge
     image: certbot/dns-cloudflare
     volumes:
-      - ./conf/:/etc/letsencrypt
-      - ./cloudflare.ini:/cloudflare.ini
+      - ./certbot/conf/:/etc/letsencrypt
+      - ./certbot/cloudflare.ini:/cloudflare.ini
     #      command: certonly --staging --keep-until-expiring --preferred-challenges dns --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --dns-cloudflare-propagation-seconds 60 --email my_email -d "mydomain.com" -d "*.mydomain.com" --agree-tos
     command: certonly --keep-until-expiring --non-interactive --preferred-challenges dns --dns-cloudflare --dns-cloudflare-credentials /cloudflare.ini --dns-cloudflare-propagation-seconds 60 --email ${CERTBOT_EMAIL} -d ${CERTBOT_DOMAIN} -d *.${CERTBOT_DOMAIN} --agree-tos
-
-
