@@ -45,3 +45,4 @@ include:
   - ./homarr/docker-compose.yml
   - ./forgejo/docker-compose.yml
   - ./searxng/docker-compose.yml
+  - ./miniflux/docker-compose.yml
