@@ -1,0 +1,51 @@
+name: miniflux
+
+networks:
+  proxy_net:
+    external: true
+  miniflux_net:
+    name: miniflux_net
+    internal: true
+
+services:
+  miniflux:
+    image: miniflux/miniflux:latest
+    container_name: miniflux
+    networks:
+      - proxy_net
+      - miniflux_net
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - RUN_MIGRATIONS=${RUN_MIGRATIONS}
+      - CREATE_ADMIN=${RUN_MIGRATIONS}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - INTEGRATION_ALLOW_PRIVATE_NETWORKS=${INTEGRATION_ALLOW_PRIVATE_NETWORKS}
+    # dns: ${ROUTER_DNS}
+    # docker internal dns server ip as per the docs
+    # dns: "127.0.0.11"
+    dns: "172.20.0.7"
+
+  db:
+    image: postgres:18
+    container_name: miniflux-postgress
+    networks:
+      - miniflux_net
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      # You may have to adjust the volume path depending on the version of Postgres
+      # Postgres 18 uses /var/lib/postgresql
+      # Postgres 17 and below uses /var/lib/postgresql/data
+      # See https://hub.docker.com/_/postgres#pgdata
+      # - miniflux-db:/var/lib/postgresql
+      - "/mnt/lv_data/miniflux:/var/lib/postgresql"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "miniflux"]
+      interval: 10s
+      start_period: 30s
