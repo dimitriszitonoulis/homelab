@@ -8,7 +8,8 @@ and optionally as a DHCP server.
 ## Local DNS
 
 Go to `Settings>DNS>Local DNS records`
-and enter a record like the one in the ![image](./images/local_dns_settings.png).
+and enter a record like the one below
+![local dns settings image](./images/local_dns_settings.png)
 
 ### Wildcard records
 
@@ -24,8 +25,8 @@ To do that we are going to add an entry to `/etc/dnsmasq.d`.
 > If you are running pihole as a container you
 > will have to bind the directory above to one in you machine
 
-Firstly,go to `Settings>All Settings>Miscellaneous` and enable
-[misc.etc_dnsmasq_d](./images/mischellaneous_setting.png).
+Firstly,go to `Settings>All Settings>Miscellaneous` and enable `misc.etc_dnsmasq_d`
+![misc.etc_dnsmasq_d image](./images/mischellaneous_setting.png).
 
 Then add a file with the name `90-mydomain.com.conf`
 (the final path will be`/etc/dnsmasq.d/90-mydomain.com.conf`).
