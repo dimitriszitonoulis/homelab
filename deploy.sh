@@ -48,7 +48,7 @@ compose_down() {
             down
     done
 
-    sudo docker compose -f "$HOME/services/reverse_proxy/docker-compose.yml" down
+    sudo docker compose -f "${PROJECTS[reverse_proxy]}" down
 
     sudo docker network rm proxy_net
 }
