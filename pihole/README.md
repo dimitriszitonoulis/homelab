@@ -33,7 +33,7 @@ Then add a file with the name `90-mydomain.com.conf`
 > [!NOTE]
 > The configuration is applied based on the order the
 > configuration files were sourced.
-> Using numbers as prefixes you can set each configuration file's priority
+> By using numbers as prefixes you can set each configuration file's priority
 > (The smaller the number the higher the priority).
 
 Inside the file paste the following:
@@ -57,7 +57,12 @@ as well as the [debian dnsmasq man page](https://manpages.debian.org/jessie/dnsm
 Take note that the man page refers to how to use the command
 `dnsmasq` instead of creating a configuration file.
 Normally when using dnsmasq you would enter a command
-in your terminal like: `dnsmasq --address=...`.
+in your terminal like:
+
+```bash
+dnsmasq --address=...
+```
+
 Since we are using dnsmasq through pihole
 and creating a configuration file only the `address=...` part is necessary.
 
