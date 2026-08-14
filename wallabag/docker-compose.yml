@@ -1,0 +1,76 @@
+name: wallabag
+
+networks:
+  proxy_net:
+    external: true
+  wallabag_net:
+    name: wallabag_net
+    internal: true
+
+services:
+  wallabag:
+    container_name: wallabag
+    image: wallabag/wallabag
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - SYMFONY__ENV__DATABASE_DRIVER=${DATABASE_DRIVER}
+      - SYMFONY__ENV__DATABASE_HOST=${DATABASE_HOST}
+      - SYMFONY__ENV__DATABASE_PORT=${DATABASE_PORT}
+      - SYMFONY__ENV__DATABASE_NAME=${DATABASE_NAME}
+      - SYMFONY__ENV__DATABASE_USER=${DATABASE_USER}
+      - SYMFONY__ENV__DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - SYMFONY__ENV__DATABASE_CHARSET=${DATABASE_CHARSET}
+      - SYMFONY__ENV__DATABASE_TABLE_PREFIX=${DATABASE_TABLE_PREFIX}
+      - SYMFONY__ENV__MAILER_DSN=${MAILER_DSN}
+      - SYMFONY__ENV__FROM_EMAIL=${FROM_EMAIL}
+      - SYMFONY__ENV__DOMAIN_NAME=${DOMAIN_NAME}
+      - SYMFONY__ENV__SERVER_NAME=${SERVER_NAME}
+      # - MYSQL_ROOT_PASSWORD=wallaroot
+      # - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
+      # - SYMFONY__ENV__DATABASE_HOST=db
+      # - SYMFONY__ENV__DATABASE_PORT=3306
+      # - SYMFONY__ENV__DATABASE_NAME=wallabag
+      # - SYMFONY__ENV__DATABASE_USER=wallabag
+      # - SYMFONY__ENV__DATABASE_PASSWORD=wallapass
+      # - SYMFONY__ENV__DATABASE_CHARSET=utf8mb4
+      # - SYMFONY__ENV__DATABASE_TABLE_PREFIX="wallabag_"
+      # - SYMFONY__ENV__MAILER_DSN=smtp://127.0.0.1
+      # - SYMFONY__ENV__FROM_EMAIL=wallabag@example.com
+      # - SYMFONY__ENV__DOMAIN_NAME=https://wallabag.mydomain.com
+      # - SYMFONY__ENV__SERVER_NAME="Your wallabag instance"
+    networks:
+      - proxy_net
+      - wallabag_net
+    ports:
+      - "1234:80"
+    volumes:
+      - ${WALLABAG_IMAGES}:/var/www/wallabag/web/assets/images
+    depends_on:
+      - db
+      - redis
+  db:
+    container_name: db
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+    networks:
+      - wallabag_net
+    volumes:
+      - ${WALLABAG_DATA}:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--innodb_initialized"]
+      interval: 20s
+      timeout: 3s
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - wallabag_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 20s
+      timeout: 3s
