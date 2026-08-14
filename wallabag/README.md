@@ -1,6 +1,6 @@
 # Wallabag
 
-## Descrition
+## Description
 
 Wallabag is a read-it-later app designed for people who want ownership,
 not another closed inbox.
