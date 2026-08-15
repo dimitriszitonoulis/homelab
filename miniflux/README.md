@@ -52,9 +52,10 @@ be defined in the `.env` file as stated in [issue 3115](https://github.com/minif
 Miniflux has an [integration](https://miniflux.app/docs/wallabag.html)
 were you can send an entry to wallabag to read it later.
 
-![wallabag_empty_integration_form.png](./images/wallabag_integration.png)
+![wallabag_empty_integration_form.png](./images/wallabag_empty_integration_form.png)
 
 Click on the user icon>API clients management
+
 ![wallabag_dashboard.png](./images/wallabag_dashboard.png)
 
 Create an api key from you user
@@ -67,6 +68,7 @@ but it is better to do it from your user (for permission reasons).
 Copy the client id and client secret, then
 enter the username and password of the user in the integration form
 (the username and password of the user for which the entry should be saved)
+
 ![wallabag_filled_integration_form](./images/wallabag_filled_integration_form.png)
 
 ### Reverse proxy
