@@ -42,8 +42,6 @@ services:
     networks:
       - proxy_net
       - wallabag_net
-    ports:
-      - "1234:80"
     volumes:
       - ${WALLABAG_IMAGES}:/var/www/wallabag/web/assets/images
     depends_on:
