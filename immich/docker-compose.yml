@@ -34,9 +34,14 @@ services:
     depends_on:
       - redis
       - database
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: false
+    user: 1000:1000
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - NET_RAW
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -49,21 +54,33 @@ services:
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     volumes:
-      - model-cache:/cache
+      - ./model_cache:/cache
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: false
+    user: 1000:1000
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - NET_RAW
 
   redis:
     container_name: immich_redis
-    image: docker.io/valkey/valkey:9@sha256:3b55fbaa0cd93cf0d9d961f405e4dfcc70efe325e2d84da207a0a8e6d8fde4f9
+    image: docker.io/valkey/valkey:9@sha256:4963247afc4cd33c7d3b2d2816b9f7f8eeebab148d29056c2ca4d7cbc966f2d9
     networks:
       - immich_net
+    volumes:
+      - ./redis:/data
     healthcheck:
       test: redis-cli ping || exit 1
-    restart: always
+    restart: unless-stopped
+    user: 1000:1000
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - NET_RAW
 
   database:
     container_name: immich_postgres
@@ -74,16 +91,18 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_DATABASE_NAME}
-      POSTGRES_INITDB_ARGS: '--data-checksums'
+      POSTGRES_INITDB_ARGS: --data-checksums
       # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
-      DB_STORAGE_TYPE: 'HDD'
+      DB_STORAGE_TYPE: HDD
     volumes:
       # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     shm_size: 128mb
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: false
-
-volumes:
-  model-cache:
+    user: 1000:1000
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - NET_RAW
