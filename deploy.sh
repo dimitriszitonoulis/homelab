@@ -15,6 +15,7 @@ declare -A PROJECTS=(
     [pihole]="$SERVICES_PATH/pihole/docker-compose.yml"
     [portainer]="$SERVICES_PATH/portainer/docker-compose.yml"
     [searxng]="$SERVICES_PATH/searxng/docker-compose.yml"
+    [wallabag]="$SERVICES_PATH/wallabag/docker-compose.yml"
 )
 
 compose_up() {
@@ -40,6 +41,8 @@ compose_up() {
 
 compose_down() {
 
+    # pids=()
+
     for project in "${!PROJECTS[@]}"; do
         [[ "$project" == "reverse_proxy" ]] && continue
 
@@ -51,6 +54,26 @@ compose_down() {
     sudo docker compose -f "${PROJECTS[reverse_proxy]}" down
 
     sudo docker network rm proxy_net
+}
+
+compose_pull() {
+
+    for project in "${!PROJECTS[@]}"; do
+
+        sudo docker compose \
+            -f "${PROJECTS[$project]}" \
+            pull
+    done
+}
+
+compose_stop() {
+
+    for project in "${!PROJECTS[@]}"; do
+
+        sudo docker compose \
+            -f "${PROJECTS[$project]}" \
+            stop
+    done
 }
 
 compose_restart() {
@@ -71,8 +94,14 @@ down)
 restart)
     compose_restart
     ;;
+stop)
+    compose_stop
+    ;;
+pull)
+    compose_pull
+    ;;
 *)
-    echo "Usage: $0 {up|down|restart}"
+    echo "Usage: $0 {up|down|restart|stop|pull}"
     exit 1
     ;;
 esac
