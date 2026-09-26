@@ -77,8 +77,7 @@ compose_stop() {
 }
 
 compose_restart() {
-    down
-    up
+    compose_down && compose_up
 }
 
 cmd="${1:-}"
@@ -94,11 +93,11 @@ down)
 restart)
     compose_restart
     ;;
-stop)
-    compose_stop
-    ;;
 pull)
     compose_pull
+    ;;
+stop)
+    compose_stop
     ;;
 *)
     echo "Usage: $0 {up|down|restart|stop|pull}"
