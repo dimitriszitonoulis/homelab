@@ -13,6 +13,7 @@ declare -A PROJECTS=(
     [kosync]="$SERVICES_PATH/kosync/docker-compose.yml"
     [miniflux]="$SERVICES_PATH/miniflux/docker-compose.yml"
     [pihole]="$SERVICES_PATH/pihole/docker-compose.yml"
+    [paperless]="$SERVICES_PATH/paperless/docker-compose.yml"
     [portainer]="$SERVICES_PATH/portainer/docker-compose.yml"
     [searxng]="$SERVICES_PATH/searxng/docker-compose.yml"
     [wallabag]="$SERVICES_PATH/wallabag/docker-compose.yml"
@@ -40,8 +41,6 @@ compose_up() {
 }
 
 compose_down() {
-
-    # pids=()
 
     for project in "${!PROJECTS[@]}"; do
         [[ "$project" == "reverse_proxy" ]] && continue
@@ -100,7 +99,7 @@ stop)
     compose_stop
     ;;
 *)
-    echo "Usage: $0 {up|down|restart|stop|pull}"
+    echo "Usage: $0 {up|down|restart}"
     exit 1
     ;;
 esac

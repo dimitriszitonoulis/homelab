@@ -21,6 +21,11 @@ kosync/logs
 pihole/etc-dnsmasq.d
 pihole/etc-pihole
 
+# paperless
+paperless/consume
+paperless/export
+paperless/docker-compose.env
+
 # searxng
 searxng/core-data
 
