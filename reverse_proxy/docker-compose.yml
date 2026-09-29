@@ -1,3 +1,5 @@
+name: reverse_proxy
+
 networks:
   proxy_net:
     external: true
