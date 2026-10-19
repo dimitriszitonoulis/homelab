@@ -1,0 +1,10 @@
+{
+  "plugins": ["prettier-plugin-nginx"],
+  "alignDirectives": false,
+  "overrides": [
+    {
+      "files": ["*.conf", "sites-enabled/*"],
+      "options": { "parser": "nginx" }
+    }
+  ]
+}
