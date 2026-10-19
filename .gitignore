@@ -31,3 +31,6 @@ searxng/core-data
 
 # homarr
 homarr/homarr
+
+# text editor stuff
+node_modules

@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "prettier-plugin-nginx": "^2.0.0"
+  }
+}
