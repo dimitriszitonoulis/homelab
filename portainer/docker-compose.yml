@@ -1,3 +1,5 @@
+name: portainer
+
 services:
   portainer:
     container_name: portainer
@@ -7,11 +9,7 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-
-volumes:
-  portainer_data:
-    name: portainer_data
+      - ${PORTAINER_DATA}:/data
 
 networks:
   proxy_net:
