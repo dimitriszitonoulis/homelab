@@ -1,3 +1,5 @@
+name: jellyfin
+
 networks:
   proxy_net:
     external: true
@@ -9,7 +11,7 @@ services:
     networks:
       - proxy_net
     # Optional - specify the uid and gid you would like Jellyfin to use instead of root
-    # user: uid:gid
+    # user: 1000:1000
     ports:
       # - 8096:8096/tcp
       - 7359:7359/udp
@@ -33,5 +35,5 @@ services:
     # environment:
     #   - JELLYFIN_PublishedServerUrl=http://example.com
     # Optional - may be necessary for docker healthcheck to pass if running in host network mode
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
