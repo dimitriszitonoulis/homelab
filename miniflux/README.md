@@ -71,6 +71,12 @@ enter the username and password of the user in the integration form
 
 ![wallabag_filled_integration_form](./images/wallabag_filled_integration_form.png)
 
+Since I am running miniflux and wallabag in docker containers on the same network,
+I must also set `INTEGRATION_ALLOW_PRIVATE_NETWORKS=1` in my `.env` file.
+
+This is becausethe docker network that the containers are on has a private
+ip address (this is the default behaviour for docker networks).
+
 ### Reverse proxy
 
 If you are using a reverse proxy you should use the name
